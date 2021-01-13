@@ -1,4 +1,28 @@
 let img,slider;
+let mat, arr;
+function array_to_matrix(arr, wid, h){
+    var i, k, ans = [], hang;
+    for (i=0; i<h; i++) {
+        hang = [];
+        for (k=0; k<wid; k++) {
+            hang.push(arr.slice((k+i*wid)*4, (k+i*wid)*4+4));
+        }
+        ans.push(hang);
+    }
+    return ans;
+}
+
+function matrix_to_array(mat){
+    let ans = [];
+    for(let lin of mat){
+        for (let p of lin){
+            for (let p2 of p){
+                ans.push(p2);
+            }
+        }
+    }
+    return ans;
+}
 function preload() {
   img = loadImage('picture/frost.jpg');
 }
@@ -7,11 +31,24 @@ function setup() {
 slider=createSlider(100,600)
 slider.position(500,930)
 	slider.style('width','80px')
+ img.loadPixels();
+ mat= array_to_matrix(img.pixels, img.width, img.height);
 }
 
 function draw() {
-	frameRate(2)
-  image(img,0,0);
+	frameRate(10)
+
+var a = mat.pop(100);
+    mat.unshift(a);
+
+    arr = matrix_to_array(mat);
+    for (let i=0;i<arr.length;i++){
+        img.pixels[i] = arr[i];
+    }
+    
+    img.updatePixels();
+    image(img, 0, 0, width, height);
+
 for (let i=0; i<slider.value(); i++){
 	let x= random(640)
 	let y= random(960)
@@ -21,13 +58,4 @@ noStroke();
 fill(c)
 	ellipse(x,y,z,z)
 }
-}
-function mousePressed(){
-	
-	img.loadPixels()
-	for(let i=0; i<2457600;i++){
-		img.pixels[i*3]=255;
-	}
-	img.updatePixels()
-	image(img,0,0)
 }
