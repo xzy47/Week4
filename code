@@ -1,0 +1,33 @@
+let img,slider;
+function preload() {
+  img = loadImage('picture/frost.jpg');
+}
+function setup() {
+  createCanvas(640,960);
+slider=createSlider(100,600)
+slider.position(500,930)
+	slider.style('width','80px')
+}
+
+function draw() {
+	frameRate(2)
+  image(img,0,0);
+for (let i=0; i<slider.value(); i++){
+	let x= random(640)
+	let y= random(960)
+	let z= random(5)
+let c=random(100,255)
+noStroke();
+fill(c)
+	ellipse(x,y,z,z)
+}
+}
+function mousePressed(){
+	
+	img.loadPixels()
+	for(let i=0; i<2457600;i++){
+		img.pixels[i*3]=255;
+	}
+	img.updatePixels()
+	image(img,0,0)
+}
